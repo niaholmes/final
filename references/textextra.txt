@@ -1,0 +1,209 @@
+TMIM (Too Much Information Movies)
+
+Project Goal:
+
+The goal of this project is to provide relevant information on a movie or TV show typed in by the user. This project will also produce a list of top 100 movies/series recommendations that the user can also pull information on.
+
+Why is something like this needed?
+
+When you hear about a movie/show on TikTok or any other social media platform, you are usually not given that much information on the movie, AND you only hear of the movie from one POV. Also, a lot of the time, I become aware of movies and TV shows through fan edits, so I only see specific clips of the movie/show and don't get any real information on it.
+
+This code will allow a user to type the name of a movie or TV show and get all the information on it (genre, actors, rated, languages, awards, plot, ratings, length, streaming options, etc.) to see if they actually want to watch it or not.
+
+The 'pip install IMDbPY' allows me to access the content in the Internet Movie Database (IMDb)
+
+I pulled this code -- along with some of the other code I used later on -- from https://www.geeksforgeeks.org/python-imdbpy-getting-title-from-searched-movie/
+
+
+I have to make sure to install these in my terminal (not in the script):
+
+1. pip install IMDbPY
+2. pip install requests
+
+
+I wrote my code for TMIM originally in Google CoLab, so I used AI to help me adjust the syntax of the code so that it would work in VS Code.
+
+
+Original Code:
+
+pip install IMDbPY
+
+# This allows the data to print out nicely. It is a code to warp text
+# I pulled this code from "https://stackoverflow.com/questions/58890109/line-wrapping-in-collaboratory-google-results"
+
+from IPython.display import HTML, display
+
+def set_css():
+  display(HTML('''
+  <style>
+    pre {
+        white-space: pre-wrap;
+    }
+  </style>
+  '''))
+get_ipython().events.register('pre_run_cell', set_css)
+
+# I created these functions to pick the specific information I wanted to pull from the APIs
+#   I had to create two seperate functions because the data in the Top 100 movies had slightly different keys than the
+# data in my other API used to pull info on the specifc movie/series the user inputs
+
+def print_movie(m): # This function is used for the Top 100 movies
+  print(f"\nTitle: {m['title']}")
+  print(f"IMDb's Rating: {m['rating']}")
+  print(f"Description: {m['description']}")
+
+# This function is used for the movie/series the user inputs
+# I added in more information since this is the specific movie/series the user wants info on
+def print_movie2(m):
+  print(f"\nTitle: {m['Title']}")
+  print(f"Released {m['Released']}")
+  print(f"IMDb's Rating: {m['Ratings'][0]['Value']}")
+  print(f"Rated: {m['Rated']}")
+  print(f"Genre: {m['Genre']}")
+  print(f"Director: {m['Director']}")
+  print(f"Writer: {m['Writer']}")
+  print(f"Main Actors: {m['Actors']}")
+  print(f"Type: {m['Type']}")
+  print(f"Runtime: {m['Runtime']}")
+  print(f"Language: {m['Language']}")
+  print(f"Description: {m['Plot']}")
+
+#  This code either prints out the Top 100 Movies from IMDb if user enters 'yes' (acting as movie recommendations for the user)
+# OR it prompts the user to enter the title of any movie or series they would like information on, printing the selected data
+# chosen by the second function I created (the title, IMDb's rating, rated, genre, actors, description, etc.) if the user enters 'no'
+
+import imdb
+import requests
+
+url = "https://imdb-top-100-movies.p.rapidapi.com/?rapidapi-key=5083e44b88msh1f9735fc8724d8dp119c14jsncb6d87d5ac51"
+
+headers = {
+	"X-RapidAPI-Key": "5083e44b88msh1f9735fc8724d8dp119c14jsncb6d87d5ac51",
+	"X-RapidAPI-Host": "imdb-top-100-movies.p.rapidapi.com"
+}
+response = requests.get(url, headers=headers)
+
+
+answer = input("Would you like to see IMDb's top 100 movies? Please enter 'yes' or 'no': ")
+
+if answer == "yes":
+    print("\nHere are IMDB's Top 100 movies")
+    for movie in response.json():
+      print_movie(movie) # first function I created above
+else:
+  imdb_info = imdb.IMDb() # this is how I am able to get info on all movies/series in IMDb's database
+  name = input("\nEnter the title of the movie or series you want information on: ")
+  search = imdb_info.search_movie(name) # search_movie method is to find all the related movies based on user's input
+
+  for movie in range(len(search)): # for movie in the length of the search
+    id = search[movie].movieID
+    print(search[movie]['title'] + " : " + id) # prints all titles that have user input within it & its ID
+
+
+  the_id = input("\nPlease find the correct title and type in its ID (the 7-digit number located next to the title) exactly as you see it in the list.\nIf the title repeats, the first result is most likely what you're looking for: ")
+
+  query = f"http://www.omdbapi.com/?apikey=56f156a5&i=tt{the_id}" # adds movie id to URL to get the info on specific movie/series
+  page = requests.get(query)
+  data = page.json()
+  print(f"\nHere is the information on {name}")
+  print_movie2(data) # second function I created above
+
+
+
+JavaScript from Chat:
+
+  function getMovieInfo() {
+    const movieName = document.getElementById('movieInput').value;
+  
+    fetch('/movie', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ movie_name: movieName })
+    })
+    .then(response => response.json())
+    .then(data => {
+      document.getElementById('result').innerHTML = `
+        <h2>${data.title}</h2>
+        <p>${data.plot}</p>
+        <p><strong>Year:</strong> ${data.year}</p>
+      `;
+    })
+    .catch(error => {
+      document.getElementById('result').innerHTML = "Error fetching movie info.";
+    });
+  }
+  
+
+  app.py from chat:
+
+from flask import Flask, render_template, request
+import imdb
+import requests
+
+app = Flask(__name__)
+
+# === ROUTE FOR HOME PAGE WITH FORM ===
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+# === ROUTE TO SHOW TOP 100 MOVIES ===
+@app.route('/top100')
+def top_100():
+    url = "https://imdb-top-100-movies.p.rapidapi.com/"
+    headers = {
+        "X-RapidAPI-Key": "5083e44b88msh1f9735fc8724d8dp119c14jsncb6d87d5ac51",
+        "X-RapidAPI-Host": "imdb-top-100-movies.p.rapidapi.com"
+    }
+
+    response = requests.get(url, headers=headers)
+    movies = response.json()
+    return render_template('top100.html', movies=movies)
+
+# === ROUTE TO SEARCH MOVIE/SERIES BY NAME ===
+@app.route('/search', methods=['POST'])
+def search():
+    name = request.form['title']
+    imdb_info = imdb.IMDb()
+    search_results = imdb_info.search_movie(name)
+    return render_template('select_movie.html', search_results=search_results, title=name)
+
+# === ROUTE TO DISPLAY MOVIE/SERIES INFO BY ID ===
+@app.route('/details', methods=['POST'])
+def details():
+    movie_id = request.form['movie_id']
+    query = f"http://www.omdbapi.com/?apikey=56f156a5&i=tt{movie_id}"
+    page = requests.get(query)
+    data = page.json()
+    return render_template('details.html', movie=data)
+
+# === FLASK STARTUP ===
+if __name__ == '__main__':
+    app.run(debug=True)
+
+
+php from chat:
+
+movie_site/
+│
+├── app.py                  # Your main Python backend
+├── templates/              # HTML files go here (Jinja templates)
+│   └── index.html
+├── static/                 # CSS, JavaScript, images
+│   ├── css/
+│   │   └── style.css
+│   └── js/
+│       └── script.js
+└── requirements.txt        # List of dependencies
+
+settings.json from chat:
+
+{
+    "liveServer.settings.donotShowInfoMsg": true,
+    "liveServer.settings.donotVerifyTags": true,
+    "window.zoomLevel": 2,
+    "liveServer.settings.CustomBrowser": "chrome",
+    "php.validate.executablePath": ""
+}

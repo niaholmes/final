@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/style.css">
+    <title>T-MIM</title>
+</head>
+<header>
+    <h1 id="tmim">Too Much Information Movies!</h1>
+</header>
+<body>
+    <div class="container">
+        <h1 id="the-tittle">Welcome to T-MIM!</h1>
+        <p id="theText">I am here to give you information on whatever movie or TV Show you want before you start watching, hopefully saving you from bad entertainment experiences!</p>
+        <div class="searches">
+            <label for="search-box">Enter A Movie or Series:</label>
+            <input type="text" class="input-value" placeholder="Type Here..." id="search-box">
+
+            <button id="enter">Search</button>
+        </div>
+    </div>
+    <p id="hidden-para">Here are the results based on your input.</p>
+
+    <p id="hid-txt">(what you're looking for is <em>most likely</em> the <strong>first</strong> option)</p>
+
+    <ul id="results"></ul>
+
+    <div id="grid-container">
+        <div id="one">
+            <ul id="results1"></ul>
+        </div>
+    
+        <div id="two">
+            <ul id="results2"></ul>
+        </div>
+    
+        <div id="three">
+            <ul id="results3"></ul>
+        </div>
+    
+        <div id="four">
+            <ul id="results4"></ul>
+        </div>
+    </div>
+    
+<button id="go-back">Back To Search</button>
+<footer>
+    <p>This information is brought to you by <a href="https://www.omdbapi.com/">the Open Movie Database.</a></p>
+</footer>
+<script src="/js/script.js"></script>
+</body>
+</html>
