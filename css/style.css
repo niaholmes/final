@@ -162,10 +162,12 @@ ul, li{
 
 #hidden-para{
     display: none;
+    margin: 20px;
 }
 
 #hid-txt{
     display: none;
+    margin: 20px;
 }
 
 footer{
