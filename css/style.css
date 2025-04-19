@@ -82,8 +82,7 @@ label{
     text-transform: uppercase;
     font-size: 12px;
     padding: 10px;
-    margin-bottom: 10px;
-    margin-left: 245px
+    margin-left: 135px
 }
 
 #go-back:hover{
@@ -174,6 +173,7 @@ footer{
     background-color: rgb(186, 97, 245);
     border: 2px solid black;
     padding: 10px;
+    margin-top: 155px
 }
 
 footer a{
@@ -261,26 +261,7 @@ footer a:hover{
     }
 
     #go-back{
-        margin-bottom: 15px;
-        margin-left: 1285px
+        margin-left: 1015px
     }
 
-    footer{
-        display: flex;
-        justify-content: center;
-        background-color: rgb(186, 97, 245);
-        border: 2px solid black;
-        padding: 20px;
-    }
-
-    footer a{
-        text-decoration: none;
-        color: black;
-    }
-
-    footer a:hover{
-        background-color: rgb(198, 146, 233);
-        padding: 5px;
-        border-radius: 4px;
-    }
 }
