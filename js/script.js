@@ -6,7 +6,7 @@ enter.addEventListener("click", async function(){
 
     console.log("successful")
     const userInput = document.getElementById("search-box");
-    let url = "http://www.omdbapi.com/?apikey=3bdcfb65&s=" + userInput.value;
+    let url = "https://www.omdbapi.com/?apikey=3bdcfb65&s=" + userInput.value;
     console.log(url);
     try{
         const response = await fetch(url);
@@ -54,7 +54,7 @@ enter.addEventListener("click", async function(){
                 console.log("successful")
                 try {
                     const movieId = json.Search[i]["imdbID"];
-                    let url = "http://www.omdbapi.com/?apikey=56f156a5&i=" + movieId;
+                    let url = "https://www.omdbapi.com/?apikey=56f156a5&i=" + movieId;
                     console.log(url);
             
                     const response = await fetch(url);
